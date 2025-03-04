@@ -1,0 +1,43 @@
+#board {
+    height: 540px;
+    width: 630px;
+
+    background-color: rgb(43, 103, 176);
+    border: 10px solid rgb(6, 46, 62);
+    border-radius: 3%;
+
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.navigation {
+    text-align: center;
+    color:white;
+    margin: auto;
+    padding: auto;
+    height : 50px;
+    background-color: #1e1e1e;
+}
+
+.tile {
+    height: 70px;
+    width: 70px;
+    margin: 5px;
+
+    background-color: white;
+    border-radius: 50%;
+    border: 5px solid rgb(27, 14, 81);
+}
+
+.tile:hover:not(.red-piece, .yellow-piece){
+    background-color: rgba(107, 11, 122, 0.634);
+}
+
+.red-piece{
+    background-color: rgb(217, 56, 56);
+}
+
+.yellow-piece{
+    background-color: rgb(255, 244, 83);
+}
