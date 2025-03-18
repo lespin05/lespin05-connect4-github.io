@@ -2,7 +2,7 @@
   "name": "luise",
   "version": "1.0.0",
   "description": "...",
-  "main": "node.js",
+  "main": "server.js",
   "directories": {
     "test": "test"
   },
