@@ -1,3 +1,15 @@
+/* Changes the attributes of h1 & h2 to apply fonts, since these are the only form of text in the HTML */
+h1{
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 30px;
+}
+
+h2{
+    font-family: Verdana, sans-serif;
+    font-size: 15px;
+}
+
+/* Attributes of the board */
 #board {
     height: 540px;
     width: 630px;
@@ -11,15 +23,17 @@
     flex-wrap: wrap;
 }
 
+/* Navigation bar at the top with the title and version */
 .navigation {
     text-align: center;
     color:white;
     margin: auto;
     padding: auto;
-    height : 50px;
+    height : 75px;
     background-color: #1e1e1e;
 }
 
+/* Tiles inside the board */
 .tile {
     height: 70px;
     width: 70px;
@@ -30,14 +44,18 @@
     border: 5px solid rgb(27, 14, 81);
 }
 
+/* Changes the color of a tile when hovering over it */
 .tile:hover:not(.red-piece, .yellow-piece){
     background-color: rgba(107, 11, 122, 0.634);
 }
 
+/* Red chips */
 .red-piece{
     background-color: rgb(217, 56, 56);
 }
 
+/* Yellow chips */
 .yellow-piece{
     background-color: rgb(255, 244, 83);
 }
+/* Unsure why I call them "chips" when they are pieces, but I think it's more fitting for Connect 4*/

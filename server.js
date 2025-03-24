@@ -9,6 +9,7 @@ const io = new Server(server, {
     transports: ["websocket", "polling"],
 });
 
+// Port of the hosting, 3002 seems to work, 3000 & 3001 don't work.
 const PORT = 3002;
 
 // Serve static files
@@ -22,13 +23,13 @@ app.get("/", (req, res) => {
 // Game state
 let gameState = {
     board: Array(6).fill(null).map(() => Array(7).fill(" ")), // 6x7 grid
-    currentColumn: [5, 5, 5, 5, 5, 5, 5], // Tracks next available row per column
-    currentPlayer: "R", // Red starts first
+    currentColumn: [5, 5, 5, 5, 5, 5, 5], // Tracks the next available row per column
+    currentPlayer: "R", // Sets the default player as Red, making sure red starts first.
 };
 
 // Handle socket connections
 io.on("connection", (socket) => {
-    console.log("A user connected:", socket.id);
+    console.log("A new foe has connected:", socket.id);
 
     // Send the current game state to the new player
     socket.emit("updateBoard", gameState);
@@ -38,7 +39,7 @@ io.on("connection", (socket) => {
         let row = gameState.currentColumn[col]; // Get the lowest available row in the column
         const player = gameState.currentPlayer;
 
-        if (row < 0) return; // Column is full, ignore move
+        if (row < 0) return; // if the columns are full, it ignores any future moves.
 
         // Place piece in the lowest available row
         gameState.board[row][col] = player;
@@ -54,11 +55,11 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-        console.log("User disconnected:", socket.id);
+        console.log("It seems your opponent has disconnected:", socket.id);
     });
 });
 
-// Start the server
+// Starts the server
 server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`The Server should be running at http://localhost:${PORT}, you should check it out...`);
 });

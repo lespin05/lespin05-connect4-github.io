@@ -1,5 +1,9 @@
-const socket = io("http://localhost:3002"); // Connect to server
+// Connects to the server!
+// Port 3000 sends the page to a "No Server Root" page.
+// Port 3001 sends the page to a page with the text saying "upgrade required"
+const socket = io("http://localhost:3002");
 
+// Variables, lots of them.
 var redPlayer = "R";
 var yellowPlayer = "Y";
 var finish = false;
@@ -7,9 +11,9 @@ var board;
 var rows = 6;
 var columns = 7;
 var currentColumn;
-var currentPlayer = redPlayer; // Default to red
+var currentPlayer = redPlayer; // Sets default player to the red chip.
 
-// Load the board when the window loads
+// Loads the board when the window loads
 window.onload = function () {
     gameStart();
 };
@@ -17,13 +21,14 @@ window.onload = function () {
 // Function to initialize the board
 function gameStart() {
     board = [];
-    currentColumn = [5, 5, 5, 5, 5, 5, 5]; // Reset column tracking
+    currentColumn = [5, 5, 5, 5, 5, 5, 5];
 
     for (let r = 0; r < rows; r++) {
         let row = [];
         for (let c = 0; c < columns; c++) {
             row.push(" ");
-
+            
+            // It's the equivalent of making div elements in HTML, saves time and readibility.
             let tile = document.createElement("div");
             tile.id = r.toString() + "-" + c.toString();
             tile.classList.add("tile");
@@ -34,27 +39,26 @@ function gameStart() {
     }
 }
 
-// Function that allows placing pieces
+// Function that allows players to place pieces, or "chips" as commonly called, I think.
 function placePiece() {
-    if (finish) return;
+    if (finish) return;     // Ends the game, makes it so players are unable to place chips.
 
     let coords = this.id.split("-");
     let c = parseInt(coords[1]);
 
-    let r = currentColumn[c]; // Get lowest available row
-    if (r < 0) return; // Column is full
-
-    // Send move to server with column index
-    socket.emit("move", { col: c });
+    let r = currentColumn[c];
+    if (r < 0) return;
+    
+    socket.emit("move", { col: c });       // Sends a move to the server with column index.
 }
 
-// Listen for updated board state from the server
+// Updates the board to the server.
 socket.on("updateBoard", (gameState) => {
     board = gameState.board;
-    currentColumn = gameState.currentColumn; // Update currentColumn
-    currentPlayer = gameState.currentPlayer; // Update player turn
+    currentColumn = gameState.currentColumn; // Updates the current column
+    currentPlayer = gameState.currentPlayer; // Updates the player's turn, changing the chip color order.
 
-    // Update board UI
+    // Updates the board.
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
             let tile = document.getElementById(r.toString() + "-" + c.toString());
@@ -68,12 +72,13 @@ socket.on("updateBoard", (gameState) => {
         }
     }
 
-    // Check for a winner
+    // Checks for the winner.
     checkWinner();
 });
 
-// Function to check for win conditions
+// Function that checks the winning conditions.
 function checkWinner() {
+    // Checks for Vertical winning conditions.
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns - 3; c++) {
             if (board[r][c] !== " " &&
@@ -86,6 +91,7 @@ function checkWinner() {
         }
     }
 
+    // Cheks for Horizontal winning conditions.
     for (let c = 0; c < columns; c++) {
         for (let r = 0; r < rows - 3; r++) {
             if (board[r][c] !== " " &&
@@ -98,6 +104,7 @@ function checkWinner() {
         }
     }
 
+    // Checks for Reversed Diagonal winning conditions.
     for (let r = 3; r < rows; r++) {
         for (let c = 0; c < columns - 3; c++) {
             if (board[r][c] !== " " &&
@@ -110,6 +117,7 @@ function checkWinner() {
         }
     }
 
+    // Checks for Diagonal winning conditions.
     for (let r = 0; r < rows - 3; r++) {
         for (let c = 0; c < columns - 3; c++) {
             if (board[r][c] !== " " &&
@@ -133,5 +141,5 @@ function setWinner(r, c) {
         winner.innerText = "Yellow Player Wins!";
         winner.style.color = "Yellow";
     }
-    finish = true;
+    finish = true;  // Once a winner is found, sets finish to true, which determines when the game has been won.
 }
